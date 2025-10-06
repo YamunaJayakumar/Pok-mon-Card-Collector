@@ -1,0 +1,51 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'poppins', san-serif;
+}
+
+.logo {
+    width: 145px;
+}
+
+.input-field {
+    width: 35rem;
+    height: 3rem;
+
+}
+
+.collect-btn {
+    height: 2.5rem;
+
+}
+
+.pokemon-card,
+.range-card {
+    font-family: 'press start 2P', cursive;
+    background-color: #ffef33;
+
+
+}
+
+.pokemon-card-h3 {
+    color: rgb(0, 0, 0) !important;
+    font-size: 1rem;
+    font-weight: 900;
+}
+
+.weight,
+.height {
+    font-size: .6rem;
+    color:#272626 !important;
+}
+
+.type {
+    color: #ffef33 !important;
+    background-color: rgb(0, 0, 0) !important;
+
+    font-size: .5rem;
+}

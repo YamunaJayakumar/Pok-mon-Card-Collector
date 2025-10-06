@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokemonCards</title>
+    <!-- google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins&display=swap" rel="stylesheet">
+    <!-- bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <!-- style.css -->
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body class="">
+    <div class="bg-primary w-100  ">
+        <div class="text-center">
+            <h1 class="p-2 fw-bold  fs-1 text-warning">Collect Your<img
+                    src="./images/859e0396b1c628832ba6b7c47c4a95b5-removebg-preview.png" alt="" class="logo">Cards </h1>
+        </div>
+        <div class=" container">
+            <div class="container id d-flex flex-column w-100 align-items-center justify-content-center py-2 ">
+
+                <div class="container">
+                    <!-- based on id -->
+                    <div class="row">
+                        <div class="col-6  ">
+                            <input type="text" id="input" placeholder="Which Pokémon do you want?Enter the id/name"
+                                class=" form-control text-dark input-field me-2 ">
+                            <button type="button"
+                                class="btn btn-warning px-3 mt-1 text-light text-center fw-bold collect-btn"
+                                onclick="pokeman()">Collect</button>
+                            <button type="button"
+                                class=" btn btn-warning  px-3 mt-1 text-light text-center fw-bold collect-btn"
+                                onclick="clearinput()">clear</button>
+                        </div>
+                        <!-- based on range -->
+                        <div class="col-6">
+                            <input type="text" class="form-control input-field me-2"
+                                placeholder="How many Pokémon can you catch? Enter a range!" id="intrange">
+                            <button type="button"
+                                class=" btn btn-warning px-3 mt-1 text-light text-center fw-bold collect-btn"
+                                onclick="ftype()">filter</button>
+                            <button type="button"
+                                class=" btn btn-warning  px-3 mt-1 text-light text-center fw-bold collect-btn"
+                                onclick="clearinput()">clear</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="height:500vh">
+        <div id="output" class="d-flex flex-wrap gap-2 w-100 container pt-3"></div>
+        <div class="container">
+            <div id="outputrange" class="text-dark row gap-2 justify-content-center align-items-center row">
+
+            </div>
+        </div>
+    </div>
+
+
+    </div>
+</body>
+<script>
+    const pokeman = async () => {
+        const inputid = document.getElementById('input').value
+        //validate input id
+        if (inputid < 1 || inputid > 1025) {
+            alert("enter a valid id between 1-1025")
+            document.getElementById("input").value = " "
+        }
+        else {
+            try {
+                const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${inputid}`);//fetch pokemon data by id
+                console.log(response)
+                //check if response ok response status(200-299)
+                if (!response.ok) {
+                    //throw an error to be caught by the catch block
+                    throw new Error(`HTTP status:${response.status}`)
+                }
+                //parse json data
+                const result = await response.json()
+                console.log(result)
+                //extracting data
+                const charimg = result.sprites.other["official-artwork"].front_default
+                const charorder = result.order
+                const charname = result.species.name
+                const chartype = result.types[0].type.name
+                const forms = result.forms[0].name
+                console.log(forms)
+                const baseExperience = result.base_experience
+                //ability
+                const ability = result.abilities.map((item) => item.ability.name)
+                // console.log(ability)
+                const abilitykey = Object.keys(ability)
+                // console.log(abilitykey)
+                const abilityname = abilitykey.map((item) => ability[item])
+                //  console.log(abilityname)
+                document.getElementById("outputrange").innerHTML=''
+
+
+
+                //add pokemon card
+                document.getElementById("output").innerHTML += `
+            <div class="card bg-body-secondary pokemon-card text-light " style="width: 18.5rem;">
+            <img src="${charimg}" class="card-img-top pokemon " alt="pokemon-cards-img">
+       
+        <div class="card-body ">
+            <h3 class="card-text pokemon-card-h3  text-black text-center">#${result.id}:${charname}</h3>
+            <div class=" w-100 border-top border-dark">
+
+                <div class="d-flex justify-content-between align-items-center weight">
+                    <p class="text-center   ">Weight</p>
+                    <p class="text-center fw-semibold text-black">${result.weight}</p>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center height">
+                    <p class="text-center ">Height</p>
+                    <p class="text-center fw-semibold text-black ">${result.height}</p>
+                </div>
+                <div class="d-flex justify-content-between align-items-center height">
+                    <p class="text-center">Ability</p>
+                    <p class="text-center   fw-semibold text-black">${abilityname[0]}</p>
+                </div>
+                <div class="d-flex justify-content-between align-items-center height">
+                    <p class="text-center ">Forms</p>
+                    <p class="text-center fw-semibold  text-black">${forms}</p>
+                </div>
+                <div class="d-flex justify-content-between align-items-center height">
+                    <p class="text-center ">Base Experience</p>
+                    <p class="text-center fw-semibold text-black">${baseExperience}</p>
+                </div>
+
+            </div>
+            <div class="border border-dark rounded  type  d-flex justify-content-center align-items-center">
+                <h6 class="text-center p-1 text-light ">${chartype}</h6>
+            </div>
+        </div>
+    
+   </div>
+           `
+
+            }
+            catch (error) {
+                console.log("cannot fetch pokemon data")
+            }
+        }
+    }
+    const ftype = async () => {
+        const inputv = document.getElementById("intrange").value
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${inputv}`)
+        if (response.status == 200) {
+            console.log(response)
+            const result = await response.json()
+            console.log(result);
+            const nameArray = result.results
+            console.log(nameArray);
+            document.getElementById("output").innerHTML = " "
+            for (let i of nameArray) {
+                
+                document.getElementById("outputrange").innerHTML += `
+           
+               <div class="col-2 border p-3 text-center bg-body-secondary range-card rounded">
+                ${i.name}</div>
+           
+          `
+
+            }
+        } else {
+            alert(`HTTP error,${response.status}`)
+        }
+
+    }
+    const clearinput = () => {
+        document.getElementById("input").value = ""
+        document.getElementById("output").innerHTML = " "
+        document.getElementById("intrange").value = ""
+        document.getElementById("outputrange").innerHTML = " "
+
+    }
+
+
+</script>
+
+</html>
