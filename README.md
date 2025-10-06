@@ -13,6 +13,16 @@ An interactive web app to **collect Pokémon cards** by ID, ame, or range.
 
 ---
 
+## Technologies Used
+
+- **HTML5** – Markup structure  
+- **CSS3** – Styling and layout  
+- **JavaScript (ES6+)** – Async functions, DOM manipulation  
+- **Bootstrap 5** – Responsive design  
+- **PokeAPI** – Fetch Pokémon data  
+
+---
+
 
 
 ## Livedemo[https://pokemoncards-collector.netlify.app/]
